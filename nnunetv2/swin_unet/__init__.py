@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 class SwinUnet(nn.Module):
-    def __init__(self, img_size: int, in_channels: int, out_channels: int, drop_rate: float, drop_path_rate: float, use_checkpoint: bool):
+    def __init__(self, img_size: int, in_channels: int, out_channels: int, drop_rate: float, drop_path_rate: float,
+                 use_checkpoint: bool):
         super(SwinUnet, self).__init__()
         self.swin_unet = SwinTransformerSys(img_size=img_size,
                                             in_chans=in_channels,

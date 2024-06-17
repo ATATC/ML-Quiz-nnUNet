@@ -29,6 +29,7 @@ class SwinUnetTrainer(nnUNetTrainer):
                                    num_input_channels: int,
                                    num_output_channels: int,
                                    enable_deep_supervision: bool = True) -> nn.Module:
+        print(f"Building network architecture: {num_input_channels} in, {num_output_channels} out")
         return SwinUnet(
             img_size=400,
             in_channels=num_input_channels,
