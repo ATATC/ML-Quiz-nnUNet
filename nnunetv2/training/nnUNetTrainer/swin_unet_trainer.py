@@ -1,4 +1,4 @@
-from torch import device, nn
+from torch import device as t_device, nn
 from torch.optim import Optimizer, AdamW
 from torch.optim.lr_scheduler import LRScheduler, CosineAnnealingLR
 
@@ -8,8 +8,8 @@ from nnunetv2.swin_unet import SwinUnet
 
 class SwinUnetTrainer(nnUNetTrainer):
     def __init__(self, plans: dict, configuration: str, fold: int, dataset_json: dict, unpack_dataset: bool = True,
-                 d: device = device('cuda')) -> None:
-        super().__init__(plans, configuration, fold, dataset_json, unpack_dataset, d)
+                 device: t_device = t_device("cuda")) -> None:
+        super().__init__(plans, configuration, fold, dataset_json, unpack_dataset, device)
         self.initial_lr = 1e-4
         self.weight_decay = 1e-5
 
