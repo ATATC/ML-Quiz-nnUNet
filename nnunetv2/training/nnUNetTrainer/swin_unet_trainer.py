@@ -1,7 +1,6 @@
 from torch import device, nn
 from torch.optim import Optimizer, AdamW
 from torch.optim.lr_scheduler import LRScheduler, CosineAnnealingLR
-from typing import override
 
 from nnunetv2.training.nnUNetTrainer.nnUNetTrainer import nnUNetTrainer
 from nnunetv2.swin_unet import SwinUnet
@@ -14,7 +13,6 @@ class SwinUnetTrainer(nnUNetTrainer):
         self.initial_lr = 1e-4
         self.weight_decay = 1e-5
 
-    @override
     def configure_optimizers(self) -> tuple[Optimizer, LRScheduler]:
         optimizer = AdamW(self.network.parameters(),
                           lr=self.initial_lr,
