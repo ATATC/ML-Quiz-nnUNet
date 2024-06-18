@@ -20,6 +20,7 @@ class SwinUnet(nn.Module):
         super(SwinUnet, self).__init__()
         self.swin_unet = SwinTransformerSys(img_size=img_size,
                                             window_size=8,
+                                            patch_size=5,
                                             in_chans=in_channels,
                                             num_classes=out_channels,
                                             drop_rate=drop_rate,
