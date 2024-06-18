@@ -22,6 +22,9 @@ class SwinUnetTrainer(nnUNetTrainer):
         lr_scheduler = CosineAnnealingLR(optimizer, T_max=self.num_epochs)
         return optimizer, lr_scheduler
 
+    def set_deep_supervision_enabled(self, enabled: bool) -> None:
+        pass
+
     @staticmethod
     def build_network_architecture(architecture_class_name: str,
                                    arch_init_kwargs: dict,
