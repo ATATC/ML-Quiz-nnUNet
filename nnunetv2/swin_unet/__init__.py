@@ -15,13 +15,10 @@ logger = logging.getLogger(__name__)
 
 
 class SwinUnet(nn.Module):
-    def __init__(self, img_size: int, in_channels: int, out_channels: int, drop_rate: float, drop_path_rate: float,
+    def __init__(self, in_channels: int, out_channels: int, drop_rate: float, drop_path_rate: float,
                  use_checkpoint: bool):
         super(SwinUnet, self).__init__()
-        self.swin_unet = SwinTransformerSys(img_size=img_size,
-                                            window_size=8,
-                                            patch_size=5,
-                                            in_chans=in_channels,
+        self.swin_unet = SwinTransformerSys(in_chans=in_channels,
                                             num_classes=out_channels,
                                             drop_rate=drop_rate,
                                             drop_path_rate=drop_path_rate,
