@@ -18,17 +18,18 @@ class SwinUnet(nn.Module):
     def __init__(self, in_channels: int, out_channels: int, drop_rate: float, drop_path_rate: float,
                  use_checkpoint: bool):
         super(SwinUnet, self).__init__()
-        self.swin_unet = SwinTransformerSys(in_chans=in_channels,
-                                            num_classes=out_channels,
-                                            drop_rate=drop_rate,
-                                            drop_path_rate=drop_path_rate,
-                                            use_checkpoint=use_checkpoint)
+        self.deep_supervision = True
+        self.model = SwinTransformerSys(in_chans=in_channels,
+                                        num_classes=out_channels,
+                                        drop_rate=drop_rate,
+                                        drop_path_rate=drop_path_rate,
+                                        use_checkpoint=use_checkpoint)
 
     def forward(self, x):
         if x.size()[1] == 1:
             x = x.repeat(1, 3, 1, 1)
-        logits = self.swin_unet(x)
-        return logits
+        logits = self.model(x)
+        return [logits, ] if self.deep_supervision else logits
 
     def load_from(self, config):
         pretrained_path = config.MODEL.PRETRAIN_CKPT
@@ -43,12 +44,12 @@ class SwinUnet(nn.Module):
                     if "output" in k:
                         print("delete key:{}".format(k))
                         del pretrained_dict[k]
-                self.swin_unet.load_state_dict(pretrained_dict, strict=False)
+                self.model.load_state_dict(pretrained_dict, strict=False)
                 return
             pretrained_dict = pretrained_dict['model']
             print("---start load pretrained model of swin encoder---")
 
-            model_dict = self.swin_unet.state_dict()
+            model_dict = self.model.state_dict()
             full_dict = copy.deepcopy(pretrained_dict)
             for k, v in pretrained_dict.items():
                 if "layers." in k:
@@ -60,6 +61,6 @@ class SwinUnet(nn.Module):
                     if full_dict[k].shape != model_dict[k].shape:
                         del full_dict[k]
 
-            self.swin_unet.load_state_dict(full_dict, strict=False)
+            self.model.load_state_dict(full_dict, strict=False)
         else:
             print("none pretrain")

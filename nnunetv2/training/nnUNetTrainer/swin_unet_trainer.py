@@ -1,4 +1,4 @@
-from torch import device as t_device, nn
+from torch import device as t_device, nn, OptimizedModule
 from torch.optim import Optimizer, AdamW
 from torch.optim.lr_scheduler import LRScheduler, CosineAnnealingLR
 
@@ -23,7 +23,13 @@ class SwinUnetTrainer(nnUNetTrainer):
         return optimizer, lr_scheduler
 
     def set_deep_supervision_enabled(self, enabled: bool) -> None:
-        pass
+        if self.is_ddp:
+            mod = self.network.module
+        else:
+            mod = self.network
+        if isinstance(mod, OptimizedModule):
+            mod = mod._orig_mod
+        mod.deep_supervision = enabled
 
     @staticmethod
     def build_network_architecture(architecture_class_name: str,
