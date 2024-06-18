@@ -19,7 +19,7 @@ class SwinUnet(nn.Module):
                  use_checkpoint: bool):
         super(SwinUnet, self).__init__()
         self.swin_unet = SwinTransformerSys(img_size=img_size,
-                                            window_size=10,
+                                            window_size=8,
                                             in_chans=in_channels,
                                             num_classes=out_channels,
                                             drop_rate=drop_rate,
