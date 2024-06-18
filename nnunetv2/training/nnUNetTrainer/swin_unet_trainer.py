@@ -1,4 +1,5 @@
-from torch import device as t_device, nn, OptimizedModule
+from torch import device as t_device, nn
+from torch._dynamo import OptimizedModule
 from torch.optim import Optimizer, AdamW
 from torch.optim.lr_scheduler import LRScheduler, CosineAnnealingLR
 
