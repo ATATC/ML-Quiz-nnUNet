@@ -29,7 +29,7 @@ class SwinUnet(nn.Module):
         if x.size()[1] == 1:
             x = x.repeat(1, 3, 1, 1)
         logits = self.model(x)
-        return [logits, ] if self.deep_supervision else logits
+        return torch.tensor((logits, )) if self.deep_supervision else logits
 
     def load_from(self, config):
         pretrained_path = config.MODEL.PRETRAIN_CKPT
