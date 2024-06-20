@@ -46,4 +46,5 @@ class SwinUnetTrainer(nnUNetTrainer):
             drop_rate=0.0,
             drop_path_rate=0.0,
             use_checkpoint=True,
+            enable_deep_supervision=enable_deep_supervision
         )

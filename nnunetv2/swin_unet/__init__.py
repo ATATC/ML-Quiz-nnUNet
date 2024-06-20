@@ -16,20 +16,20 @@ logger = logging.getLogger(__name__)
 
 class SwinUnet(nn.Module):
     def __init__(self, in_channels: int, out_channels: int, drop_rate: float, drop_path_rate: float,
-                 use_checkpoint: bool):
+                 use_checkpoint: bool, enable_deep_supervision: bool):
         super(SwinUnet, self).__init__()
-        self.deep_supervision = True
-        self.model = SwinTransformerSys(in_chans=in_channels,
-                                        num_classes=out_channels,
-                                        drop_rate=drop_rate,
-                                        drop_path_rate=drop_path_rate,
-                                        use_checkpoint=use_checkpoint)
+        self.enable_deep_supervision: bool = enable_deep_supervision
+        self.model: nn.Module = SwinTransformerSys(in_chans=in_channels,
+                                                   num_classes=out_channels,
+                                                   drop_rate=drop_rate,
+                                                   drop_path_rate=drop_path_rate,
+                                                   use_checkpoint=use_checkpoint)
 
     def forward(self, x):
         if x.size()[1] == 1:
             x = x.repeat(1, 3, 1, 1)
         logits = self.model(x)
-        return logits.unsqueeze(0) if self.deep_supervision else logits
+        return logits.unsqueeze(0) if self.enable_deep_supervision else logits
 
     def load_from(self, config):
         pretrained_path = config.MODEL.PRETRAIN_CKPT
